@@ -14,12 +14,12 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(email, password)) {
+    if (await login(email, password)) {
       router.push('/');
     } else {
-      alert('일치하는 회원정보가 없습니다.');
+      // Alert is already handled in AuthContext mostly, but double check
     }
   };
 

@@ -46,7 +46,7 @@ export default function SignupPage() {
       }
 
       // Verification Passed
-      if (signup(email, password)) {
+      if (await signup(email, password)) {
         alert('가입이 완료되었습니다. 로그인해주세요.');
         router.push('/login');
       }
