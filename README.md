@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 면접 질문 기록기 (Interview Recorder)
 
-## Getting Started
+면접 질문을 체계적으로 기록하고, 답변을 준비할 수 있는 웹 애플리케이션입니다.
 
-First, run the development server:
+![Project Preview](public/window.svg)
+
+## 📋 프로젝트 소개
+
+면접 과정에서 받은 질문들을 기업별로 정리하고, 완벽한 답변을 준비할 수 있도록 돕는 도구입니다. 복잡한 기능 없이 직관적인 UI로 질문과 답변 기록에 집중할 수 있습니다.
+
+## ✨ 주요 기능
+
+### 1. 기업 관리 (Dashboard)
+
+- **리스트 관리**: 면접 진행 중인 기업들을 카드 형태로 한눈에 볼 수 있습니다.
+- **정렬 기능**: 이름순, 마감임박순, 마감여유순으로 기업을 정렬할 수 있습니다.
+- **채용 정보**: 채용 공고 링크와 마감일을 저장하여 일정 관리를 돕습니다.
+- **기업 수정/삭제**: 등록된 기업 정보를 손쉽게 수정하거나 삭제할 수 있습니다.
+
+### 2. 질문 및 답변 관리 (Q&A)
+
+- **질문 기록**: 면접 예상 질문이나 실제 받은 질문을 등록합니다.
+- **답변 작성**: 각 질문에 대해 답변을 작성하고 수정할 수 있습니다.
+- **글자수 제한**: 답변 길이를 500자, 1000자, 또는 바이트(Byte) 단위로 제한하여 실전처럼 연습할 수 있습니다. (실시간 카운팅 제공)
+- **순서 변경**: 질문의 중요도나 면접 순서에 따라 질문 순서를 지정할 수 있습니다.
+
+### 3. 사용자 편의성
+
+- **다크 모드**: 눈이 편안한 다크 모드를 완벽하게 지원합니다.
+- **반응형 디자인**: PC, 태블릿, 모바일 등 모든 기기에서 최적화된 화면을 제공합니다.
+- **데이터 저장**: 별도의 회원가입 없이 브라우저에 데이터가 자동 저장됩니다.
+
+## 🛠 기술 스택
+
+- **Framework**: Next.js 14+ (App Router)
+- **Language**: TypeScript
+- **Styling**: Vanilla CSS Modules (Monotone Aesthetics)
+- **Animation**: Framer Motion
+- **Icons**: Lucide React
+- **Icons**: Vercel (Recommended)
+
+## 🚀 시작하기
+
+### 설치
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 실행
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 💾 데이터 저장 방식
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+이 프로젝트는 **LocalStorage**를 사용합니다.
 
-## Learn More
+- 별도의 서버나 데이터베이스(DB) 없이 **사용자의 브라우저 내부 저장소**에 모든 데이터가 저장됩니다.
+- **주의사항**: 브라우저 캐시를 삭제하거나, 다른 기기/브라우저로 접속하면 저장된 데이터가 보이지 않습니다.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Created by [Your Name]
