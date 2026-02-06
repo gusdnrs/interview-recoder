@@ -124,8 +124,19 @@ a {
 .container {
   width: 100%;
   max-width: var(--container-width);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
+  margin: 2rem auto; /* Floating margin on desktop */
+  padding: 2rem var(--container-padding); /* Default padding */
+
+  /* Sheet Effect for Readability */
+  background-color: hsl(var(--surface) / 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  border: 1px solid hsl(var(--border) / 0.5);
+
+  /* Ensure it takes distinct space */
+  min-height: 80vh;
 }
 
 .glass {
@@ -181,7 +192,12 @@ a {
   }
 
   .container {
-    padding: 0 1rem;
+    padding: 1rem;
+    margin: 0 auto;
+    border-radius: 0;
+    min-height: 100vh;
+    border: none;
+    border-bottom: 1px solid hsl(var(--border));
   }
 }
 
