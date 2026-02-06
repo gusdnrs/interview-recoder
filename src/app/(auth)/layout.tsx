@@ -17,9 +17,5 @@ export default function AuthLayout({
     };
   }, []);
 
-  return (
-    <div style={{ background: '#fff', minHeight: '100vh', color: '#000' }}>
-      {children}
-    </div>
-  );
+  return <div style={{ minHeight: '100vh' }}>{children}</div>;
 }
