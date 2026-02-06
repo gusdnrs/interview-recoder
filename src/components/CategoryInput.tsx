@@ -28,6 +28,7 @@ export const CategoryInput = ({ categories, onChange }: CategoryInputProps) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.nativeEvent.isComposing) return; // Prevent duplicate submission during IME composition
     if (e.key === 'Enter') {
       e.preventDefault();
       addCategory(inputValue);

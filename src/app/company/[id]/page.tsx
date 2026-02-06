@@ -285,7 +285,13 @@ export default function CompanyDetail({
                       style={{
                         border: isSelected
                           ? '1px solid hsl(var(--primary))'
-                          : undefined,
+                          : question.answers.length > 0
+                            ? '1px solid hsl(var(--primary) / 0.4)'
+                            : undefined,
+                        background:
+                          question.answers.length > 0
+                            ? 'hsl(var(--surface-hover) / 0.5)'
+                            : undefined,
                       }}
                     >
                       <div
@@ -298,11 +304,30 @@ export default function CompanyDetail({
                         <div
                           style={{
                             marginTop: '0.25rem',
-                            color: 'hsl(var(--primary))',
+                            color:
+                              question.answers.length > 0
+                                ? 'hsl(var(--primary))'
+                                : 'hsl(var(--text-muted))',
                             flexShrink: 0,
                           }}
                         >
-                          <MessageCircle size={24} />
+                          {question.answers.length > 0 ? (
+                            <div
+                              style={{
+                                background: 'hsl(var(--primary) / 0.1)',
+                                borderRadius: '50%',
+                                padding: '0.4rem',
+                                display: 'flex',
+                              }}
+                            >
+                              <CheckSquare
+                                size={20}
+                                style={{ strokeWidth: 2.5 }}
+                              />
+                            </div>
+                          ) : (
+                            <MessageCircle size={24} style={{ opacity: 0.5 }} />
+                          )}
                         </div>
                         <div style={{ flex: 1 }}>
                           <div
@@ -313,13 +338,31 @@ export default function CompanyDetail({
                               flexWrap: 'wrap',
                             }}
                           >
-                            {question.order && (
+                            {question.answers.length > 0 && (
                               <span
                                 style={{
                                   fontSize: '0.75rem',
                                   fontWeight: 700,
                                   background: 'hsl(var(--primary))',
                                   color: 'hsl(var(--primary-foreground))',
+                                  padding: '0.1rem 0.5rem',
+                                  borderRadius: 'var(--radius-full)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                작성완료
+                              </span>
+                            )}
+
+                            {question.order && (
+                              <span
+                                style={{
+                                  fontSize: '0.75rem',
+                                  fontWeight: 700,
+                                  background: 'hsl(var(--surface-hover))', // Tuned down for order
+                                  color: 'hsl(var(--text-main))',
+                                  border: '1px solid hsl(var(--border))',
                                   padding: '0.1rem 0.5rem',
                                   borderRadius: 'var(--radius-full)',
                                   display: 'flex',
@@ -374,6 +417,10 @@ export default function CompanyDetail({
                               fontWeight: 600,
                               marginBottom: '0.5rem',
                               lineHeight: 1.4,
+                              color:
+                                question.answers.length > 0
+                                  ? 'hsl(var(--text-main))'
+                                  : 'hsl(var(--text-muted))', // Gray out unanswered title slightly? No, keep clear.
                             }}
                           >
                             {question.text}
@@ -386,7 +433,18 @@ export default function CompanyDetail({
                               color: 'hsl(var(--text-muted))',
                             }}
                           >
-                            <span>{question.answers.length}개의 답변</span>
+                            <span
+                              style={{
+                                color:
+                                  question.answers.length > 0
+                                    ? 'hsl(var(--primary))'
+                                    : 'inherit',
+                                fontWeight:
+                                  question.answers.length > 0 ? 600 : 400,
+                              }}
+                            >
+                              {question.answers.length}개의 답변
+                            </span>
                             <span>•</span>
                             <span>
                               등록일{' '}
