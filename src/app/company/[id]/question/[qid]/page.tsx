@@ -168,6 +168,7 @@ export default function QuestionDetail({
       {/* Header */}
       <div style={{ flexShrink: 0, marginBottom: '1.5rem' }}>
         <div
+          style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
