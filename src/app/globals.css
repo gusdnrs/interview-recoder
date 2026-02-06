@@ -110,7 +110,7 @@ body::before {
   width: 100%;
   height: 100%;
   /* Use theme background with opacity to tint the image */
-  background-color: hsl(var(--background) / 0.85);
+  background-color: hsl(var(--background) / 0.5);
   z-index: -1;
   transition: background-color 0.3s ease;
 }
@@ -129,10 +129,13 @@ a {
 }
 
 .glass {
-  background: hsl(var(--surface) / 0.8);
+  background: hsl(var(--surface) / 0.95);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid hsl(var(--border));
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .gradient-text {
