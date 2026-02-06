@@ -13,9 +13,15 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+import { AuthProvider } from '@/context/AuthContext';
+import AuthGuard from '@/components/AuthGuard';
+import Footer from '@/components/Footer';
+
+import RecaptchaProvider from '@/providers/RecaptchaProvider';
+
 export const metadata: Metadata = {
-  title: '면접 질문 기록 (Interview Recorder)',
-  description: ' Track and organize your interview questions and answers.',
+  title: 'Interview Recorder',
+  description: '면접 질문 아카이빙',
 };
 
 export default function RootLayout({
@@ -24,9 +30,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ThemeProvider>{children}</ThemeProvider>
+    <html lang="ko" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <RecaptchaProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <AuthGuard>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh',
+                  }}
+                >
+                  <div style={{ flex: 1 }}>{children}</div>
+                  <Footer />
+                </div>
+              </AuthGuard>
+            </AuthProvider>
+          </ThemeProvider>
+        </RecaptchaProvider>
       </body>
     </html>
   );

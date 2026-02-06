@@ -1,8 +1,13 @@
 export interface Answer {
   id: string;
   content: string;
-  createdAt: string; // ISO Date string
-  updatedAt: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface User {
+  email: string;
+  password?: string; // Optional in memory, required for storage logic
 }
 
 export interface Question {

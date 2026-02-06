@@ -1,12 +1,15 @@
 import { useLocalStorage } from './useLocalStorage';
 import { Company } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
+import { useAuth } from '@/context/AuthContext';
 
 export function useInterviewData() {
-  const [companies, setCompanies] = useLocalStorage<Company[]>(
-    'interview-data',
-    [],
-  );
+  const { user } = useAuth();
+  const storageKey = user
+    ? `interview-data-${user.email}`
+    : 'interview-data-guest';
+
+  const [companies, setCompanies] = useLocalStorage<Company[]>(storageKey, []);
 
   const addCompany = (name: string, jobDate?: string, jobLink?: string) => {
     const newCompany: Company = {

@@ -22,7 +22,10 @@ import { SearchTrigger } from '@/components/SearchTrigger';
 
 import { Company } from '@/types';
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function Dashboard() {
+  const { user, logout } = useAuth();
   const { companies, addCompany, deleteCompany, updateCompany } =
     useInterviewData();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -111,68 +114,124 @@ export default function Dashboard() {
         className="responsive-header"
         style={{
           marginBottom: '2.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          alignItems: 'stretch',
         }}
       >
-        <div>
-          <h1
-            className="gradient-text"
+        {/* Top User Bar */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            fontSize: '0.9rem',
+            gap: '1rem',
+            borderBottom: '1px solid hsl(var(--border))',
+            paddingBottom: '0.5rem',
+          }}
+        >
+          <span style={{ color: 'hsl(var(--text-muted))' }}>
+            {user?.email?.split('@')[0]}님 환영합니다
+          </span>
+          <button
+            onClick={logout}
             style={{
-              fontSize: '2.5rem',
-              fontWeight: 800,
-              marginBottom: '0.5rem',
+              background: 'none',
+              border: 'none',
+              color: 'hsl(var(--primary))',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '0.9rem',
             }}
           >
-            면접 질문 기록
-          </h1>
-          <p style={{ color: 'hsl(var(--text-muted))', fontSize: '1.1rem' }}>
-            받았던 질문을 기록하고, 완벽한 답변을 준비하세요.
-          </p>
+            로그아웃
+          </button>
         </div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <SearchTrigger />
 
-          {/* Sort Control */}
-          <div className="dropdown-container" style={{ position: 'relative' }}>
-            <select
-              value={sortBy}
-              onChange={(e) =>
-                setSortBy(
-                  e.target.value as 'name' | 'deadline-soon' | 'deadline-late',
-                )
-              }
+        {/* Main Header Content */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            flexWrap: 'wrap',
+            gap: '1rem',
+          }}
+        >
+          <div>
+            <h1
+              className="gradient-text"
               style={{
-                appearance: 'none',
-                background: 'hsl(var(--surface))',
-                border: '1px solid hsl(var(--border))',
-                padding: '0.5rem 2rem 0.5rem 0.8rem',
-                borderRadius: 'var(--radius-md)',
-                fontSize: '0.875rem',
-                color: 'hsl(var(--text-main))',
-                cursor: 'pointer',
+                fontSize: '2.5rem',
+                fontWeight: 800,
+                marginBottom: '0.5rem',
               }}
             >
-              <option value="name">이름순</option>
-              <option value="deadline-soon">마감임박순</option>
-              <option value="deadline-late">마감여유순</option>
-            </select>
-            <ArrowUpDown
-              size={14}
-              style={{
-                position: 'absolute',
-                right: '0.7rem',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                pointerEvents: 'none',
-                color: 'hsl(var(--text-muted))',
-              }}
-            />
+              면접 질문 기록
+            </h1>
+            <p style={{ color: 'hsl(var(--text-muted))', fontSize: '1.1rem' }}>
+              받았던 질문을 기록하고, 완벽한 답변을 준비하세요.
+            </p>
           </div>
 
-          <ThemeToggle />
-          <Button onClick={openAddModal}>
-            <Plus size={20} />
-            기업 추가
-          </Button>
+          {/* Actions Row */}
+          <div
+            style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}
+          >
+            <SearchTrigger />
+
+            {/* Sort Control */}
+            <div
+              className="dropdown-container"
+              style={{ position: 'relative' }}
+            >
+              <select
+                value={sortBy}
+                onChange={(e) =>
+                  setSortBy(
+                    e.target.value as
+                      | 'name'
+                      | 'deadline-soon'
+                      | 'deadline-late',
+                  )
+                }
+                style={{
+                  appearance: 'none',
+                  background: 'hsl(var(--surface))',
+                  border: '1px solid hsl(var(--border))',
+                  padding: '0.6rem 2rem 0.6rem 1rem',
+                  borderRadius: 'var(--radius-md)',
+                  fontSize: '0.875rem',
+                  color: 'hsl(var(--text-main))',
+                  cursor: 'pointer',
+                  height: '40px',
+                }}
+              >
+                <option value="name">이름순</option>
+                <option value="deadline-soon">마감임박순</option>
+                <option value="deadline-late">마감여유순</option>
+              </select>
+              <ArrowUpDown
+                size={14}
+                style={{
+                  position: 'absolute',
+                  right: '0.7rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  pointerEvents: 'none',
+                  color: 'hsl(var(--text-muted))',
+                }}
+              />
+            </div>
+
+            <ThemeToggle />
+            <Button onClick={openAddModal}>
+              <Plus size={20} />
+              기업 추가
+            </Button>
+          </div>
         </div>
       </div>
 
