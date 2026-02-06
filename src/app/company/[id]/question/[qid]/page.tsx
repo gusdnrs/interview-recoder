@@ -168,10 +168,11 @@ export default function QuestionDetail({
       {/* Header */}
       <div style={{ flexShrink: 0, marginBottom: '1.5rem' }}>
         <div
-          style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'flex-start',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '1rem',
           }}
         >
           <div>
@@ -182,7 +183,7 @@ export default function QuestionDetail({
                 alignItems: 'center',
                 gap: '0.5rem',
                 color: 'hsl(var(--text-muted))',
-                marginBottom: '1rem',
+                marginBottom: '0.5rem',
                 fontSize: '0.875rem',
               }}
             >

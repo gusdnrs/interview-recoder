@@ -27,6 +27,21 @@
 
   --container-width: 1000px;
   --header-height: 4rem;
+
+  /* Responsive Typography & Spacing */
+  --font-size-base: 16px;
+  --container-padding: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-base: 14px;
+    --container-padding: 1rem;
+  }
+}
+
+html {
+  font-size: var(--font-size-base);
 }
 
 /* Dark Theme Overlay */
@@ -85,7 +100,7 @@ a {
   width: 100%;
   max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 var(--container-padding);
 }
 
 .glass {
