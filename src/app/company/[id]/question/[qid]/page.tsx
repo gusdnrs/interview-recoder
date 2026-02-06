@@ -20,7 +20,7 @@ export default function QuestionDetail({
 }) {
   const { id, qid } = use(params);
   const router = useRouter();
-  const { getCompany, addAnswer, updateAnswer } = useInterviewData();
+  const { getCompany, addAnswer, updateAnswer, isLoading } = useInterviewData();
   const company = getCompany(id);
   const question = company?.questions.find((q) => q.id === qid);
 
@@ -38,6 +38,57 @@ export default function QuestionDetail({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [answerText]);
+
+  if (isLoading) {
+    return (
+      <main
+        className={`container ${styles.container}`}
+        style={{ paddingTop: '2rem', height: 'calc(100vh - 6rem)' }}
+      >
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div
+            style={{
+              width: '200px',
+              height: '20px',
+              background: 'hsl(var(--surface-hover))',
+              marginBottom: '1rem',
+              borderRadius: '4px',
+            }}
+          ></div>
+          <div
+            style={{
+              width: '60%',
+              height: '30px',
+              background: 'hsl(var(--surface-hover))',
+              borderRadius: '4px',
+            }}
+          ></div>
+        </div>
+        <Card
+          className="glass"
+          style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.5,
+          }}
+        >
+          <div
+            className="loader"
+            style={{
+              width: '30px',
+              height: '30px',
+              border: '3px solid hsl(var(--border))',
+              borderTopColor: 'hsl(var(--primary))',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }}
+          />
+        </Card>
+      </main>
+    );
+  }
 
   if (!company || !question) {
     return <div>질문을 찾을 수 없습니다</div>;

@@ -28,7 +28,8 @@ export default function CompanyDetail({
 }) {
   const { id } = use(params);
   const router = useRouter();
-  const { getCompany, addQuestion, deleteQuestions } = useInterviewData();
+  const { getCompany, addQuestion, deleteQuestions, isLoading } =
+    useInterviewData();
   const company = getCompany(id);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +43,63 @@ export default function CompanyDetail({
 
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
+
+  if (isLoading) {
+    return (
+      <main
+        className="container"
+        style={{ paddingTop: '3rem', paddingBottom: '3rem' }}
+      >
+        <div style={{ marginBottom: '2rem' }}>
+          <div
+            style={{
+              width: '150px',
+              height: '20px',
+              background: 'hsl(var(--surface-hover))',
+              marginBottom: '1.5rem',
+              borderRadius: '4px',
+            }}
+          ></div>
+          <div
+            style={{
+              width: '300px',
+              height: '40px',
+              background: 'hsl(var(--surface-hover))',
+              marginBottom: '0.5rem',
+              borderRadius: '4px',
+            }}
+          ></div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {[1, 2, 3].map((i) => (
+            <Card
+              key={i}
+              className="glass"
+              style={{
+                height: '80px',
+                opacity: 0.5,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <div
+                className="loader"
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  border: '2px solid hsl(var(--border))',
+                  borderTopColor: 'hsl(var(--primary))',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                }}
+              />
+            </Card>
+          ))}
+        </div>
+      </main>
+    );
+  }
 
   if (!company) {
     return (
