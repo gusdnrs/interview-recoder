@@ -9,11 +9,12 @@ import {
 } from 'react';
 import { User } from '@/types';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => boolean;
-  signup: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => Promise<boolean>;
+  signup: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -25,55 +26,65 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Load session on mount
+  // Load session on mount & Listen to Auth Changes
   useEffect(() => {
-    const storedSession = localStorage.getItem('interview-session');
-    if (storedSession) {
-      setUser(JSON.parse(storedSession));
-    }
-    setIsLoading(false);
+    // Check active session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUser({ email: session.user.email || '' });
+      }
+      setIsLoading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser({ email: session.user.email || '' });
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = (email: string, password: string) => {
-    const usersStr = localStorage.getItem('interview-users');
-    const users: User[] = usersStr ? JSON.parse(usersStr) : [];
+  const login = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    // Find user
-    const foundUser = users.find(
-      (u) => u.email === email && u.password === password,
-    );
-
-    if (foundUser) {
-      // Remove password from session for safety
-      const sessionUser = { ...foundUser };
-      delete sessionUser.password;
-
-      setUser(sessionUser);
-      localStorage.setItem('interview-session', JSON.stringify(sessionUser));
-      return true;
-    }
-    return false;
-  };
-
-  const signup = (email: string, password: string) => {
-    const usersStr = localStorage.getItem('interview-users');
-    const users: User[] = usersStr ? JSON.parse(usersStr) : [];
-
-    // Check if exists
-    if (users.some((u) => u.email === email)) {
-      alert('이미 존재하는 이메일입니다.');
+    if (error) {
+      alert(`로그인 실패: ${error.message}`);
       return false;
     }
-
-    const newUser: User = { email, password };
-    users.push(newUser);
-    localStorage.setItem('interview-users', JSON.stringify(users));
     return true;
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('interview-session');
+  const signup = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      // Translate common errors
+      if (error.message.includes('already registered')) {
+        alert('이미 가입된 이메일입니다.');
+      } else {
+        alert(`가입 실패: ${error.message}`);
+      }
+      return false;
+    }
+
+    // Auto login happens via onAuthStateChange
+    return true;
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
     router.replace('/login');
   };
 
