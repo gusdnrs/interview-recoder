@@ -50,11 +50,19 @@ export default function SignupPage() {
         alert('가입이 완료되었습니다. 로그인해주세요.');
         router.push('/login');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Signup error:', error);
-      alert(
-        '가입 처리 중 오류가 발생했습니다. 개발자에게 문의하세요 (reCAPTCHA Key 확인 필요).',
-      );
+
+      if (axios.isAxiosError(error) && error.response) {
+        // Server responded with a status code outside 2xx range
+        const message =
+          error.response.data.message || '서버 오류가 발생했습니다.';
+        alert(`가입 실패: ${message}`);
+      } else {
+        alert(
+          '가입 처리 중 알 수 없는 오류가 발생했습니다. (reCAPTCHA Key 설정이나 네트워크를 확인하세요).',
+        );
+      }
     } finally {
       setIsVerifying(false);
     }
