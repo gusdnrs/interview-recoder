@@ -16,7 +16,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (await login(email, password)) {
+    if (await login(email.trim(), password.trim())) {
       router.push('/');
     } else {
       // Alert is already handled in AuthContext mostly, but double check
