@@ -1,0 +1,50 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  gap: 0.5rem;
+}
+
+/* Primary: Simple solid color, no gradient, no shadow */
+.primary {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.primary:hover {
+  opacity: 0.9;
+}
+
+/* Secondary: Simple border, light background */
+.secondary {
+  background: transparent;
+  color: hsl(var(--text-main));
+  border: 1px solid hsl(var(--border));
+}
+
+.secondary:hover {
+  background: hsl(var(--surface-hover));
+}
+
+/* Ghost: No background until hover */
+.ghost {
+  background: transparent;
+  color: hsl(var(--text-muted));
+}
+
+.ghost:hover {
+  color: hsl(var(--text-main));
+  background: hsl(var(--surface-hover));
+}
+
+.fullWidth {
+  width: 100%;
+}
