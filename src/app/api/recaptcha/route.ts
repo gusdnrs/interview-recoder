@@ -29,14 +29,36 @@ export async function POST(request: Request) {
       `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`,
     );
 
-    if (response.data.success && response.data.score >= 0.5) {
-      return NextResponse.json({ success: true, score: response.data.score });
-    } else {
+    const { success, score, 'error-codes': errorCodes } = response.data;
+
+    // 1. Google API itself failed (e.g. Invalid Secret Key, Timeout)
+    if (!success) {
+      console.error('reCAPTCHA Validation Failed:', errorCodes);
       return NextResponse.json(
-        { success: false, message: 'Bot detected', score: response.data.score },
+        {
+          success: false,
+          message: `reCAPTCHA 설정 오류: ${errorCodes ? errorCodes.join(', ') : 'Unknown'}`,
+          errorCodes,
+        },
+        { status: 500 },
+      ); // Configuration error is a Server Error
+    }
+
+    // 2. Score is too low (Bot detected)
+    // Lower threshold to 0.1 for initial rollout as v3 needs to learn traffic
+    if (score < 0.1) {
+      console.warn(`Bot detected. Score: ${score}`);
+      return NextResponse.json(
+        {
+          success: false,
+          message: `봇으로 감지되었습니다 (Score: ${score})`,
+          score,
+        },
         { status: 400 },
       );
     }
+
+    return NextResponse.json({ success: true, score });
   } catch (error) {
     return NextResponse.json(
       { success: false, message: 'Verification failed' },
