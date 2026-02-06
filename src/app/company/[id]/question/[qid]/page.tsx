@@ -193,7 +193,6 @@ export default function QuestionDetail({
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <SearchTrigger />
-            <ThemeToggle />
           </div>
         </div>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3 }}>

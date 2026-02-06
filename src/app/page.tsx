@@ -225,12 +225,6 @@ export default function Dashboard() {
                 }}
               />
             </div>
-
-            <ThemeToggle />
-            <Button onClick={openAddModal}>
-              <Plus size={20} />
-              기업 추가
-            </Button>
           </div>
         </div>
       </div>
@@ -269,56 +263,55 @@ export default function Dashboard() {
             </Card>
           ))}
         </div>
-      ) : companies.length === 0 ? (
-        <Card
-          style={{
-            textAlign: 'center',
-            padding: '4rem 2rem',
-            borderStyle: 'dashed',
-            background: 'transparent',
-          }}
-        >
-          <div
-            style={{
-              width: '64px',
-              height: '64px',
-              background: 'hsl(var(--surface))',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1.5rem',
-              color: 'hsl(var(--primary))',
-            }}
-          >
-            <Plus size={32} />
-          </div>
-          <h3
-            style={{
-              fontSize: '1.25rem',
-              marginBottom: '0.5rem',
-              fontWeight: 600,
-            }}
-          >
-            아직 등록된 기업이 없습니다
-          </h3>
-          <p
-            style={{ color: 'hsl(var(--text-muted))', marginBottom: '1.5rem' }}
-          >
-            면접을 진행 중인 기업을 추가해보세요.
-          </p>
-          <Button variant="secondary" onClick={openAddModal}>
-            첫 번째 기업 추가하기
-          </Button>
-        </Card>
       ) : (
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
             gap: '1.5rem',
           }}
         >
+          {/* Add New Company Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Card
+              hoverable
+              onClick={openAddModal}
+              style={{
+                height: '100%',
+                minHeight: '200px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '2px dashed hsl(var(--border))',
+                background: 'transparent',
+                color: 'hsl(var(--text-muted))',
+                cursor: 'pointer',
+              }}
+            >
+              <div
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: 'hsl(var(--surface))',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '1rem',
+                  color: 'hsl(var(--primary))',
+                }}
+              >
+                <Plus size={24} />
+              </div>
+              <span style={{ fontWeight: 600 }}>새로운 기업 추가</span>
+            </Card>
+          </motion.div>
+
           {sortedCompanies.map((company) => (
             <motion.div
               layout // Animate reordering

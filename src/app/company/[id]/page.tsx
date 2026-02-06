@@ -238,7 +238,6 @@ export default function CompanyDetail({
             style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}
           >
             <SearchTrigger />
-            <ThemeToggle />
 
             {/* Selection Mode Toggle or Delete Action */}
             {isSelectionMode ? (
@@ -268,39 +267,35 @@ export default function CompanyDetail({
                 <CheckSquare size={20} />
               </Button>
             )}
-
-            <Button onClick={() => setIsModalOpen(true)}>
-              <Plus size={20} />
-              질문 추가
-            </Button>
           </div>
         </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {company.questions.length === 0 ? (
-          <Card
-            style={{
-              textAlign: 'center',
-              padding: '3rem',
-              borderStyle: 'dashed',
-              background: 'transparent',
-            }}
+          {/* Add Question Card - Always Visible First */}
+          <div
+              onClick={() => setIsModalOpen(true)}
+              style={{ cursor: 'pointer' }}
           >
-            <p
-              style={{
-                color: 'hsl(var(--text-muted))',
-                marginBottom: '1.5rem',
-              }}
-            >
-              아직 등록된 질문이 없습니다. 면접에서 어떤 질문을 받으셨나요?
-            </p>
-            <Button variant="secondary" onClick={() => setIsModalOpen(true)}>
-              첫 번째 질문 추가하기
-            </Button>
-          </Card>
-        ) : (
-          company.questions
+             <Card
+               hoverable
+               style={{ 
+                   display: 'flex', 
+                   alignItems: 'center', 
+                   justifyContent: 'center', 
+                   padding: '1.5rem',
+                   border: '2px dashed hsl(var(--border))', 
+                   background: 'transparent',
+                   color: 'hsl(var(--text-muted))',
+                   gap: '0.8rem'
+               }}
+             >
+                <Plus size={20} />
+                <span style={{ fontWeight: 600 }}>새로운 질문 추가하기</span>
+             </Card>
+          </div>
+
+          {company.questions
             .sort((a, b) => (a.order || 0) - (b.order || 0))
             .map((question) => {
               const isSelected = selectedQuestions.includes(question.id);
