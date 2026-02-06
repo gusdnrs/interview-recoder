@@ -26,7 +26,7 @@ import { useAuth } from '@/context/AuthContext';
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
-  const { companies, addCompany, deleteCompany, updateCompany } =
+  const { companies, addCompany, deleteCompany, updateCompany, isLoading } =
     useInterviewData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null); // Track if editing
@@ -235,7 +235,41 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {companies.length === 0 ? (
+      {isLoading ? (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '1.5rem',
+          }}
+        >
+          {[1, 2, 3].map((i) => (
+            <Card
+              key={i}
+              className="glass"
+              style={{
+                height: '200px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: 0.5,
+              }}
+            >
+              <div
+                className="loader"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  border: '3px solid hsl(var(--border))',
+                  borderTopColor: 'hsl(var(--primary))',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                }}
+              />
+            </Card>
+          ))}
+        </div>
+      ) : companies.length === 0 ? (
         <Card
           style={{
             textAlign: 'center',
