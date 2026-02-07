@@ -2,16 +2,16 @@
 
 import { useState, use, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Edit2, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { useRouter } from 'next/navigation'; // Unused
+import { Save, Edit2, X } from 'lucide-react';
+import { motion } from 'framer-motion'; // AnimatePresence removed
 import { useInterviewData } from '@/hooks/useInterviewData';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Question, Company } from '@/types';
+// import { Question, Company } from '@/types'; // Unused types
 import styles from './page.module.css';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { SearchTrigger } from '@/components/SearchTrigger';
+// import { ThemeToggle } from '@/components/ThemeToggle';
+// import { SearchTrigger } from '@/components/SearchTrigger';
 
 export default function QuestionDetail({
   params,
@@ -19,7 +19,7 @@ export default function QuestionDetail({
   params: Promise<{ id: string; qid: string }>;
 }) {
   const { id, qid } = use(params);
-  const router = useRouter();
+  // const router = useRouter(); // Unused
   const { getCompany, addAnswer, updateAnswer, isLoading } = useInterviewData();
   const company = getCompany(id);
   const question = company?.questions.find((q) => q.id === qid);
@@ -165,36 +165,34 @@ export default function QuestionDetail({
         paddingTop: '2rem',
       }}
     >
-      {/* Header */}
+      {/* Breadcrumb Navigation */}
       <div style={{ flexShrink: 0, marginBottom: '1.5rem' }}>
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '1rem',
+            gap: '0.5rem',
+            color: 'hsl(var(--text-muted))',
+            fontSize: '0.875rem',
+            marginBottom: '1rem',
           }}
         >
-          <div>
-            <Link
-              href={`/company/${id}`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                color: 'hsl(var(--text-muted))',
-                marginBottom: '0.5rem',
-                fontSize: '0.875rem',
-              }}
-            >
-              <ArrowLeft size={16} /> {company.name} (으)로 돌아가기
-            </Link>
-          </div>
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <SearchTrigger />
-          </div>
+          <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+            Home
+          </Link>
+          <span>/</span>
+          <Link
+            href={`/company/${id}`}
+            style={{ color: 'inherit', textDecoration: 'none' }}
+          >
+            {company.name}
+          </Link>
+          <span>/</span>
+          <span style={{ color: 'hsl(var(--text-main))', fontWeight: 500 }}>
+            Q{question.order ?? '?'}
+          </span>
         </div>
+
         <h1 style={{ fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3 }}>
           <span
             style={{

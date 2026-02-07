@@ -17,9 +17,9 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { CategoryInput } from '@/components/CategoryInput';
-import { SearchTrigger } from '@/components/SearchTrigger';
+// import { ThemeToggle } from '@/components/ThemeToggle';
+// import { SearchTrigger } from '@/components/SearchTrigger';
 
 export default function CompanyDetail({
   params,
@@ -175,24 +175,32 @@ export default function CompanyDetail({
       style={{ paddingTop: '3rem', paddingBottom: '3rem' }}
     >
       <div style={{ marginBottom: '2rem' }}>
-        <Link
-          href="/"
+        {/* Breadcrumb-like Navigation */}
+        <div
           style={{
-            display: 'inline-flex',
+            display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
             color: 'hsl(var(--text-muted))',
-            marginBottom: '1.5rem',
             fontSize: '0.875rem',
+            marginBottom: '1rem',
           }}
         >
-          <ArrowLeft size={16} /> 대시보드로 돌아가기
-        </Link>
+          <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+            Home
+          </Link>
+          <span>/</span>
+          <span style={{ color: 'hsl(var(--text-main))', fontWeight: 500 }}>
+            {company.name}
+          </span>
+        </div>
 
         <div
           className="responsive-header"
           style={{
-            alignItems: 'flex-start', // Override alignment for desktop if needed, or rely on class
+            alignItems: 'flex-start',
+            display: 'flex',
+            justifyContent: 'space-between',
           }}
         >
           {/* Company Title */}
@@ -237,8 +245,6 @@ export default function CompanyDetail({
           <div
             style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}
           >
-            <SearchTrigger />
-
             {/* Selection Mode Toggle or Delete Action */}
             {isSelectionMode ? (
               <>

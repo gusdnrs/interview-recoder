@@ -121,10 +121,20 @@ a {
 }
 
 /* Utilities */
+.desktop-only {
+  display: none;
+}
+@media (min-width: 768px) {
+  .desktop-only {
+    display: block;
+  }
+}
+
 .container {
   width: 100%;
   max-width: var(--container-width);
-  margin: 2rem auto; /* Floating margin on desktop */
+  /* Header Height (64px) + Spacing (2rem) = ~6rem */
+  margin: 6rem auto 2rem auto;
   padding: 2rem var(--container-padding); /* Default padding */
 
   /* Sheet Effect for Readability */

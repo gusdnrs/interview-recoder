@@ -17,15 +17,15 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { SearchTrigger } from '@/components/SearchTrigger';
+// import { ThemeToggle } from '@/components/ThemeToggle'; // Moved to Header
+// import { SearchTrigger } from '@/components/SearchTrigger'; // Moved to Header
 
 import { Company } from '@/types';
 
-import { useAuth } from '@/context/AuthContext';
+// import { useAuth } from '@/context/AuthContext';
 
 export default function Dashboard() {
-  const { user, logout } = useAuth();
+  // const { user, logout } = useAuth(); // Moved to Header
   const { companies, addCompany, deleteCompany, updateCompany, isLoading } =
     useInterviewData();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -111,120 +111,54 @@ export default function Dashboard() {
       style={{ paddingTop: '3rem', paddingBottom: '3rem' }}
     >
       <div
-        className="responsive-header"
+        className="dashboard-actions"
         style={{
-          marginBottom: '2.5rem',
+          marginBottom: '2rem',
           display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-          alignItems: 'stretch',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
-        {/* Top User Bar */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            fontSize: '0.9rem',
-            gap: '1rem',
-            borderBottom: '1px solid hsl(var(--border))',
-            paddingBottom: '0.5rem',
-          }}
-        >
-          <span style={{ color: 'hsl(var(--text-muted))' }}>
-            {user?.email?.split('@')[0]}님 환영합니다
-          </span>
-          <button
-            onClick={logout}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'hsl(var(--primary))',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '0.9rem',
-            }}
-          >
-            로그아웃
-          </button>
-        </div>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>기업 목록</h2>
 
-        {/* Main Header Content */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            flexWrap: 'wrap',
-            gap: '1rem',
-          }}
-        >
-          <div>
-            <h1
-              className="gradient-text"
+        {/* Actions Row */}
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          {/* Sort Control */}
+          <div className="dropdown-container" style={{ position: 'relative' }}>
+            <select
+              value={sortBy}
+              onChange={(e) =>
+                setSortBy(
+                  e.target.value as 'name' | 'deadline-soon' | 'deadline-late',
+                )
+              }
               style={{
-                fontSize: '2.5rem',
-                fontWeight: 800,
-                marginBottom: '0.5rem',
+                appearance: 'none',
+                background: 'hsl(var(--surface))',
+                border: '1px solid hsl(var(--border))',
+                padding: '0.6rem 2rem 0.6rem 1rem',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.875rem',
+                color: 'hsl(var(--text-main))',
+                cursor: 'pointer',
+                height: '40px',
               }}
             >
-              면접 질문 기록
-            </h1>
-            <p style={{ color: 'hsl(var(--text-muted))', fontSize: '1.1rem' }}>
-              받았던 질문을 기록하고, 완벽한 답변을 준비하세요.
-            </p>
-          </div>
-
-          {/* Actions Row */}
-          <div
-            style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}
-          >
-            <SearchTrigger />
-
-            {/* Sort Control */}
-            <div
-              className="dropdown-container"
-              style={{ position: 'relative' }}
-            >
-              <select
-                value={sortBy}
-                onChange={(e) =>
-                  setSortBy(
-                    e.target.value as
-                      | 'name'
-                      | 'deadline-soon'
-                      | 'deadline-late',
-                  )
-                }
-                style={{
-                  appearance: 'none',
-                  background: 'hsl(var(--surface))',
-                  border: '1px solid hsl(var(--border))',
-                  padding: '0.6rem 2rem 0.6rem 1rem',
-                  borderRadius: 'var(--radius-md)',
-                  fontSize: '0.875rem',
-                  color: 'hsl(var(--text-main))',
-                  cursor: 'pointer',
-                  height: '40px',
-                }}
-              >
-                <option value="name">이름순</option>
-                <option value="deadline-soon">마감임박순</option>
-                <option value="deadline-late">마감여유순</option>
-              </select>
-              <ArrowUpDown
-                size={14}
-                style={{
-                  position: 'absolute',
-                  right: '0.7rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  pointerEvents: 'none',
-                  color: 'hsl(var(--text-muted))',
-                }}
-              />
-            </div>
+              <option value="name">이름순</option>
+              <option value="deadline-soon">마감임박순</option>
+              <option value="deadline-late">마감여유순</option>
+            </select>
+            <ArrowUpDown
+              size={14}
+              style={{
+                position: 'absolute',
+                right: '0.7rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                pointerEvents: 'none',
+                color: 'hsl(var(--text-muted))',
+              }}
+            />
           </div>
         </div>
       </div>
