@@ -1,7 +1,14 @@
 'use client';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, use, useRef, useEffect } from 'react';
+import Link from 'next/link';
+import { ChevronLeft, ChevronRight, Save, Edit2, X } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useInterviewData } from '@/hooks/useInterviewData';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 import { QuestionListSidebar } from '@/components/QuestionListSidebar';
+import styles from './page.module.css';
 
 export default function QuestionDetail({
   params,
