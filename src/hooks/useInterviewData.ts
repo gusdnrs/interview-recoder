@@ -17,7 +17,11 @@ export function useInterviewData() {
     }
 
     const fetchData = async () => {
-      setIsLoading(true);
+      // Only show loading state if we don't have data yet
+      if (companies.length === 0) {
+        setIsLoading(true);
+      }
+
       try {
         const { data, error } = await supabase
           .from('companies')
@@ -64,7 +68,7 @@ export function useInterviewData() {
     };
 
     fetchData();
-  }, [user]);
+  }, [user?.email]); // Dependency on email string to avoid object ref changes
 
   const addCompany = async (
     name: string,
