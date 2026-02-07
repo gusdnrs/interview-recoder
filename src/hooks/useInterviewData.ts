@@ -17,10 +17,10 @@ export function useInterviewData() {
     }
 
     const fetchData = async () => {
-      // Only show loading state if we don't have data yet
-      if (companies.length === 0) {
-        setIsLoading(true);
-      }
+      // If we already have data, don't fetch again purely on focus/auth-check
+      if (companies.length > 0) return;
+
+      setIsLoading(true);
 
       try {
         const { data, error } = await supabase

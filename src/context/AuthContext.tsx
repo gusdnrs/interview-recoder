@@ -40,7 +40,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        setUser({ email: session.user.email || '' });
+        // Prevent redundant state updates if email is same
+        setUser((prev) => {
+          if (prev?.email === session.user.email) return prev;
+          return { email: session.user.email || '' };
+        });
       } else {
         setUser(null);
       }
