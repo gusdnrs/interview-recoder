@@ -19,7 +19,7 @@ export function QuestionListSidebar({
     <aside
       className="glass"
       style={{
-        width: '300px',
+        width: '260px',
         display: 'flex',
         flexDirection: 'column',
         borderRight: '1px solid hsl(var(--border))',
@@ -27,7 +27,7 @@ export function QuestionListSidebar({
         height: '100%',
         overflow: 'hidden',
         flexShrink: 0,
-        borderRadius: 'var(--radius-lg) 0 0 var(--radius-lg)', // Round left corners only if standalone, but typically sidebar is straight
+        borderRadius: 'var(--radius-lg) 0 0 var(--radius-lg)',
       }}
     >
       <div
@@ -96,7 +96,7 @@ export function QuestionListSidebar({
                   />
                 )}
               </div>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <span
                   style={{
                     fontWeight: 600,
@@ -110,6 +110,10 @@ export function QuestionListSidebar({
                 <span
                   style={{
                     color: isCurrent ? 'inherit' : 'hsl(var(--text-muted))',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
                   }}
                 >
                   {q.text}

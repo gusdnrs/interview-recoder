@@ -379,10 +379,9 @@ export function QuestionDetailClient({ id, qid }: QuestionDetailClientProps) {
             </motion.div>
           )}
 
-          {/* ANSWER VIEW AREA - Shown when answers exist (effectively Single Answer mode if user only adds one) */}
+          {/* ANSWER VIEW AREA - Shown when answers exist */}
           {!showWriter && hasAnswers && (
-            <motion.div
-              layout
+            <div
               style={{
                 flex: 1,
                 overflowY: 'auto',
@@ -573,6 +572,7 @@ export function QuestionDetailClient({ id, qid }: QuestionDetailClientProps) {
                                 lineHeight: 1.7,
                                 fontSize: '1rem',
                                 padding: '0.5rem 0',
+                                color: 'hsl(var(--text-main))', // Explicit color
                               }}
                             >
                               {ans.content}
@@ -584,7 +584,7 @@ export function QuestionDetailClient({ id, qid }: QuestionDetailClientProps) {
                   );
                 })}
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Bottom Navigation Buttons */}
