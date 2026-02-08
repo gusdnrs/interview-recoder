@@ -2,7 +2,14 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Save, Edit2, X } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Save,
+  Edit2,
+  X,
+  ArrowLeft,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useInterviewData } from '@/hooks/useInterviewData';
 import { Button } from '@/components/ui/Button';
@@ -216,9 +223,21 @@ export function QuestionDetailClient({ id, qid }: QuestionDetailClientProps) {
               {company.name}
             </Link>
             <span>/</span>
-            <span style={{ color: 'hsl(var(--text-main))', fontWeight: 500 }}>
-              Q{question.order ?? '?'}
-            </span>
+            <span
+              style={{ color: 'hsl(var(--text-main))', fontWeight: 500 }}
+            ></span>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <Link href={`/company/${id}`}>
+              <Button
+                variant="ghost"
+                style={{ paddingLeft: 0, color: 'hsl(var(--text-muted))' }}
+              >
+                <ArrowLeft size={16} style={{ marginRight: '0.5rem' }} /> 질문
+                목록으로 돌아가기
+              </Button>
+            </Link>
           </div>
 
           <h1 style={{ fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3 }}>

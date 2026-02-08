@@ -192,6 +192,18 @@ export function CompanyDetailClient({ id }: CompanyDetailClientProps) {
           </span>
         </div>
 
+        <div style={{ marginBottom: '1rem' }}>
+          <Link href="/">
+            <Button
+              variant="ghost"
+              style={{ paddingLeft: 0, color: 'hsl(var(--text-muted))' }}
+            >
+              <ArrowLeft size={16} style={{ marginRight: '0.5rem' }} />{' '}
+              대시보드로 돌아가기
+            </Button>
+          </Link>
+        </div>
+
         <div
           className="responsive-header"
           style={{
