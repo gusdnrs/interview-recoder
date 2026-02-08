@@ -31,7 +31,8 @@ export function useInterviewData() {
             questions (
               *,
               answers
-            )
+            ),
+            schedules (*)
           `,
           )
           .order('created_at', { ascending: false });
@@ -45,6 +46,20 @@ export function useInterviewData() {
           jobDate: c.job_date,
           jobLink: c.job_link,
           createdAt: c.created_at,
+          schedules: (c.schedules || [])
+            .map((s: any) => ({
+              id: s.id,
+              companyId: s.company_id,
+              title: s.title,
+              date: s.date,
+              description: s.description,
+              type: s.type,
+              createdAt: s.created_at,
+            }))
+            .sort(
+              (a: any, b: any) =>
+                new Date(a.date).getTime() - new Date(b.date).getTime(),
+            ),
           questions: (c.questions || [])
             .map((q: any) => ({
               id: q.id,
@@ -85,6 +100,7 @@ export function useInterviewData() {
         jobDate,
         jobLink,
         questions: [],
+        schedules: [],
         createdAt: new Date().toISOString(),
       };
       setCompanies((prev) => [newCompany, ...prev]);
@@ -302,6 +318,110 @@ export function useInterviewData() {
       .eq('id', questionId);
   };
 
+  const addSchedule = async (
+    companyId: string,
+    title: string,
+    date: string,
+    description?: string,
+    type?: string,
+  ) => {
+    const tempId = uuidv4();
+    const newSchedule = {
+      id: tempId,
+      companyId,
+      title,
+      date,
+      description,
+      type,
+      createdAt: new Date().toISOString(),
+    };
+
+    setCompanies((prev) =>
+      prev.map((c) =>
+        c.id === companyId
+          ? {
+              ...c,
+              schedules: [...c.schedules, newSchedule].sort(
+                (a, b) =>
+                  new Date(a.date).getTime() - new Date(b.date).getTime(),
+              ),
+            }
+          : c,
+      ),
+    );
+
+    const { data, error } = await supabase
+      .from('schedules')
+      .insert({
+        company_id: companyId,
+        title,
+        date,
+        description,
+        type,
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      setCompanies((prev) =>
+        prev.map((c) =>
+          c.id === companyId
+            ? {
+                ...c,
+                schedules: c.schedules.map((s) =>
+                  s.id === tempId ? { ...s, id: data.id } : s,
+                ),
+              }
+            : c,
+        ),
+      );
+    }
+  };
+
+  const updateSchedule = async (
+    companyId: string,
+    scheduleId: string,
+    updates: {
+      title?: string;
+      date?: string;
+      description?: string;
+      type?: string;
+    },
+  ) => {
+    setCompanies((prev) =>
+      prev.map((c) =>
+        c.id === companyId
+          ? {
+              ...c,
+              schedules: c.schedules
+                .map((s) => (s.id === scheduleId ? { ...s, ...updates } : s))
+                .sort(
+                  (a, b) =>
+                    new Date(a.date).getTime() - new Date(b.date).getTime(),
+                ),
+            }
+          : c,
+      ),
+    );
+
+    await supabase.from('schedules').update(updates).eq('id', scheduleId);
+  };
+
+  const deleteSchedule = async (companyId: string, scheduleId: string) => {
+    setCompanies((prev) =>
+      prev.map((c) =>
+        c.id === companyId
+          ? {
+              ...c,
+              schedules: c.schedules.filter((s) => s.id !== scheduleId),
+            }
+          : c,
+      ),
+    );
+
+    await supabase.from('schedules').delete().eq('id', scheduleId);
+  };
+
   // Helper
   const getCompany = (id: string) => companies.find((c) => c.id === id);
 
@@ -314,6 +434,9 @@ export function useInterviewData() {
     deleteQuestions,
     addAnswer,
     updateAnswer,
+    addSchedule,
+    updateSchedule,
+    deleteSchedule,
     getCompany,
     isLoading,
   };

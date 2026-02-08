@@ -21,12 +21,23 @@ export interface Question {
   createdAt: string;
 }
 
+export interface Schedule {
+  id: string;
+  companyId: string;
+  title: string;
+  date: string;
+  description?: string;
+  type?: string; // e.g., '서류', '코딩테스트', '면접', '기타'
+  createdAt: string;
+}
+
 export interface Company {
   id: string;
   name: string;
   jobDate?: string;
   jobLink?: string;
   questions: Question[];
+  schedules: Schedule[];
   createdAt: string;
 }
 

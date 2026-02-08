@@ -18,6 +18,7 @@ import { Card } from '@/components/ui/Card';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
 import { CategoryInput } from '@/components/CategoryInput';
+import { ScheduleManager } from '@/components/ScheduleManager';
 
 interface CompanyDetailClientProps {
   id: string;
@@ -286,254 +287,318 @@ export function CompanyDetailClient({ id }: CompanyDetailClientProps) {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {/* Add Question Card - Always Visible First */}
-        <div onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer' }}>
-          <Card
-            hoverable
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)',
+          gap: '2rem',
+          alignItems: 'start',
+        }}
+      >
+        {/* Left Column: Schedule & Questions */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          {/* Schedule Section */}
+          <section>
+            <ScheduleManager
+              companyId={company.id}
+              schedules={company.schedules || []}
+            />
+          </section>
+
+          {/* Questions Section Title */}
+          <div
             style={{
               display: 'flex',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              justifyContent: 'center',
-              padding: '1.5rem',
-              border: '2px dashed hsl(var(--border))',
-              background: 'transparent',
-              color: 'hsl(var(--text-muted))',
-              gap: '0.8rem',
+              marginBottom: '-0.5rem',
             }}
           >
-            <Plus size={20} />
-            <span style={{ fontWeight: 600 }}>새로운 질문 추가하기</span>
-          </Card>
-        </div>
+            <h2
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >
+              <MessageCircle size={20} className="text-primary" /> 면접 질문
+            </h2>
+            <span
+              style={{ fontSize: '0.9rem', color: 'hsl(var(--text-muted))' }}
+            >
+              총 {company.questions.length}개
+            </span>
+          </div>
 
-        {company.questions
-          .sort((a, b) => (a.order || 0) - (b.order || 0))
-          .map((question) => {
-            const isSelected = selectedQuestions.includes(question.id);
-            return (
-              <div
-                key={question.id}
-                style={{
-                  position: 'relative',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                }}
-              >
-                {/* Checkbox for Selection Mode */}
-                {isSelectionMode && (
-                  <div
-                    onClick={() => toggleQuestionSelection(question.id)}
-                    style={{
-                      cursor: 'pointer',
-                      color: isSelected
-                        ? 'hsl(var(--primary))'
-                        : 'hsl(var(--border))',
-                    }}
-                  >
-                    {isSelected ? (
-                      <CheckSquare size={24} />
-                    ) : (
-                      <Square size={24} />
-                    )}
-                  </div>
-                )}
+          {/* Add Question Card */}
+          <div
+            onClick={() => setIsModalOpen(true)}
+            style={{ cursor: 'pointer' }}
+          >
+            <Card
+              hoverable
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '1.5rem',
+                border: '2px dashed hsl(var(--border))',
+                background: 'transparent',
+                color: 'hsl(var(--text-muted))',
+                gap: '0.8rem',
+              }}
+            >
+              <Plus size={20} />
+              <span style={{ fontWeight: 600 }}>새로운 질문 추가하기</span>
+            </Card>
+          </div>
 
-                <Link
-                  href={`/company/${company.id}/question/${question.id}`}
-                  style={{ flex: 1, textDecoration: 'none' }}
+          {company.questions
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .map((question) => {
+              const isSelected = selectedQuestions.includes(question.id);
+              return (
+                <div
+                  key={question.id}
+                  style={{
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                  }}
                 >
-                  <Card
-                    hoverable
-                    className="glass"
-                    style={{
-                      border: isSelected
-                        ? '1px solid hsl(var(--primary))'
-                        : question.answers.length > 0
-                          ? '1px solid hsl(var(--primary) / 0.4)'
-                          : undefined,
-                      background:
-                        question.answers.length > 0
-                          ? 'hsl(var(--surface-hover) / 0.5)'
-                          : undefined,
-                    }}
-                  >
+                  {/* Checkbox for Selection Mode */}
+                  {isSelectionMode && (
                     <div
+                      onClick={() => toggleQuestionSelection(question.id)}
                       style={{
-                        display: 'flex',
-                        gap: '1rem',
-                        alignItems: 'flex-start',
+                        cursor: 'pointer',
+                        color: isSelected
+                          ? 'hsl(var(--primary))'
+                          : 'hsl(var(--border))',
+                      }}
+                    >
+                      {isSelected ? (
+                        <CheckSquare size={24} />
+                      ) : (
+                        <Square size={24} />
+                      )}
+                    </div>
+                  )}
+
+                  <Link
+                    href={`/company/${company.id}/question/${question.id}`}
+                    style={{ flex: 1, textDecoration: 'none' }}
+                  >
+                    <Card
+                      hoverable
+                      className="glass"
+                      style={{
+                        border: isSelected
+                          ? '1px solid hsl(var(--primary))'
+                          : question.answers.length > 0
+                            ? '1px solid hsl(var(--primary) / 0.4)'
+                            : undefined,
+                        background:
+                          question.answers.length > 0
+                            ? 'hsl(var(--surface-hover) / 0.5)'
+                            : undefined,
                       }}
                     >
                       <div
                         style={{
-                          marginTop: '0.25rem',
-                          color:
-                            question.answers.length > 0
-                              ? 'hsl(var(--primary))'
-                              : 'hsl(var(--text-muted))',
-                          flexShrink: 0,
+                          display: 'flex',
+                          gap: '1rem',
+                          alignItems: 'flex-start',
                         }}
                       >
-                        {question.answers.length > 0 ? (
-                          <div
-                            style={{
-                              background: 'hsl(var(--primary) / 0.1)',
-                              borderRadius: '50%',
-                              padding: '0.4rem',
-                              display: 'flex',
-                            }}
-                          >
-                            <CheckSquare
-                              size={20}
-                              style={{ strokeWidth: 2.5 }}
-                            />
-                          </div>
-                        ) : (
-                          <MessageCircle size={24} style={{ opacity: 0.5 }} />
-                        )}
-                      </div>
-                      <div style={{ flex: 1 }}>
                         <div
                           style={{
-                            display: 'flex',
-                            gap: '0.5rem',
-                            marginBottom: '0.5rem',
-                            flexWrap: 'wrap',
-                          }}
-                        >
-                          {question.answers.length > 0 && (
-                            <span
-                              style={{
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                background: 'hsl(var(--primary))',
-                                color: 'hsl(var(--primary-foreground))',
-                                padding: '0.1rem 0.5rem',
-                                borderRadius: 'var(--radius-full)',
-                                display: 'flex',
-                                alignItems: 'center',
-                              }}
-                            >
-                              작성완료
-                            </span>
-                          )}
-
-                          {question.order && (
-                            <span
-                              style={{
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                background: 'hsl(var(--surface-hover))', // Tuned down for order
-                                color: 'hsl(var(--text-main))',
-                                border: '1px solid hsl(var(--border))',
-                                padding: '0.1rem 0.5rem',
-                                borderRadius: 'var(--radius-full)',
-                                display: 'flex',
-                                alignItems: 'center',
-                              }}
-                            >
-                              Q{question.order}
-                            </span>
-                          )}
-
-                          {question.categories &&
-                            question.categories.map((cat) => (
-                              <span
-                                key={cat}
-                                style={{
-                                  fontSize: '0.75rem',
-                                  background: 'hsl(var(--surface-hover))',
-                                  padding: '0.1rem 0.5rem',
-                                  borderRadius: 'var(--radius-full)',
-                                  color: 'hsl(var(--text-muted))',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '0.25rem',
-                                }}
-                              >
-                                <Tag size={10} /> {cat}
-                              </span>
-                            ))}
-
-                          {/* Limit Badge */}
-                          {question.limitType && (
-                            <span
-                              style={{
-                                fontSize: '0.75rem',
-                                border: '1px solid hsl(var(--border))',
-                                padding: '0.1rem 0.4rem',
-                                borderRadius: '4px',
-                                color: 'hsl(var(--text-muted))',
-                              }}
-                            >
-                              {question.limitCount}
-                              {question.limitType === 'char'
-                                ? '자'
-                                : 'byte'}{' '}
-                              제한
-                            </span>
-                          )}
-                        </div>
-                        <h3
-                          style={{
-                            fontSize: '1.125rem',
-                            fontWeight: 600,
-                            marginBottom: '0.5rem',
-                            lineHeight: 1.4,
+                            marginTop: '0.25rem',
                             color:
                               question.answers.length > 0
-                                ? 'hsl(var(--text-main))'
-                                : 'hsl(var(--text-muted))', // Gray out unanswered title slightly? No, keep clear.
+                                ? 'hsl(var(--primary))'
+                                : 'hsl(var(--text-muted))',
+                            flexShrink: 0,
                           }}
                         >
-                          {question.text}
-                        </h3>
-                        <div
-                          style={{
-                            display: 'flex',
-                            gap: '1rem',
-                            fontSize: '0.875rem',
-                            color: 'hsl(var(--text-muted))',
-                          }}
-                        >
-                          <span
+                          {question.answers.length > 0 ? (
+                            <div
+                              style={{
+                                background: 'hsl(var(--primary) / 0.1)',
+                                borderRadius: '50%',
+                                padding: '0.4rem',
+                                display: 'flex',
+                              }}
+                            >
+                              <CheckSquare
+                                size={20}
+                                style={{ strokeWidth: 2.5 }}
+                              />
+                            </div>
+                          ) : (
+                            <MessageCircle size={24} style={{ opacity: 0.5 }} />
+                          )}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div
                             style={{
-                              color:
-                                question.answers.length > 0
-                                  ? 'hsl(var(--primary))'
-                                  : 'inherit',
-                              fontWeight:
-                                question.answers.length > 0 ? 600 : 400,
+                              display: 'flex',
+                              gap: '0.5rem',
+                              marginBottom: '0.5rem',
+                              flexWrap: 'wrap',
                             }}
                           >
-                            {question.answers.length}개의 답변
-                          </span>
-                          <span>•</span>
-                          <span>
-                            등록일{' '}
-                            {new Date(question.createdAt).toLocaleDateString()}
-                          </span>
+                            {question.answers.length > 0 && (
+                              <span
+                                style={{
+                                  fontSize: '0.75rem',
+                                  fontWeight: 700,
+                                  background: 'hsl(var(--primary))',
+                                  color: 'hsl(var(--primary-foreground))',
+                                  padding: '0.1rem 0.5rem',
+                                  borderRadius: 'var(--radius-full)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                작성완료
+                              </span>
+                            )}
+
+                            {question.order && (
+                              <span
+                                style={{
+                                  fontSize: '0.75rem',
+                                  fontWeight: 700,
+                                  background: 'hsl(var(--surface-hover))', // Tuned down for order
+                                  color: 'hsl(var(--text-main))',
+                                  border: '1px solid hsl(var(--border))',
+                                  padding: '0.1rem 0.5rem',
+                                  borderRadius: 'var(--radius-full)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                Q{question.order}
+                              </span>
+                            )}
+
+                            {question.categories &&
+                              question.categories.map((cat) => (
+                                <span
+                                  key={cat}
+                                  style={{
+                                    fontSize: '0.75rem',
+                                    background: 'hsl(var(--surface-hover))',
+                                    padding: '0.1rem 0.5rem',
+                                    borderRadius: 'var(--radius-full)',
+                                    color: 'hsl(var(--text-muted))',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.25rem',
+                                  }}
+                                >
+                                  <Tag size={10} /> {cat}
+                                </span>
+                              ))}
+
+                            {/* Limit Badge */}
+                            {question.limitType && (
+                              <span
+                                style={{
+                                  fontSize: '0.75rem',
+                                  border: '1px solid hsl(var(--border))',
+                                  padding: '0.1rem 0.4rem',
+                                  borderRadius: '4px',
+                                  color: 'hsl(var(--text-muted))',
+                                }}
+                              >
+                                {question.limitCount}
+                                {question.limitType === 'char'
+                                  ? '자'
+                                  : 'byte'}{' '}
+                                제한
+                              </span>
+                            )}
+                          </div>
+                          <h3
+                            style={{
+                              fontSize: '1.125rem',
+                              fontWeight: 600,
+                              marginBottom: '0.5rem',
+                              lineHeight: 1.4,
+                              color:
+                                question.answers.length > 0
+                                  ? 'hsl(var(--text-main))'
+                                  : 'hsl(var(--text-muted))', // Gray out unanswered title slightly? No, keep clear.
+                            }}
+                          >
+                            {question.text}
+                          </h3>
+                          <div
+                            style={{
+                              display: 'flex',
+                              gap: '1rem',
+                              fontSize: '0.875rem',
+                              color: 'hsl(var(--text-muted))',
+                            }}
+                          >
+                            <span
+                              style={{
+                                color:
+                                  question.answers.length > 0
+                                    ? 'hsl(var(--primary))'
+                                    : 'inherit',
+                                fontWeight:
+                                  question.answers.length > 0 ? 600 : 400,
+                              }}
+                            >
+                              {question.answers.length}개의 답변
+                            </span>
+                            <span>•</span>
+                            <span>
+                              등록일{' '}
+                              {new Date(
+                                question.createdAt,
+                              ).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            color: 'hsl(var(--primary))',
+                            alignSelf: 'center',
+                          }}
+                        >
+                          <ArrowLeft
+                            size={20}
+                            style={{ transform: 'rotate(180deg)' }}
+                          />
                         </div>
                       </div>
-                      <div
-                        style={{
-                          color: 'hsl(var(--primary))',
-                          alignSelf: 'center',
-                        }}
-                      >
-                        <ArrowLeft
-                          size={20}
-                          style={{ transform: 'rotate(180deg)' }}
-                        />
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
-              </div>
-            );
-          })}
+                    </Card>
+                  </Link>
+                </div>
+              );
+            })}
+        </div>
+
+        {company.questions.length === 0 &&
+          (company.schedules?.length || 0) === 0 && (
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '4rem',
+                color: 'hsl(var(--text-muted))',
+                gridColumn: '1 / -1',
+              }}
+            >
+              <p>등록된 정보가 없습니다.</p>
+            </div>
+          )}
       </div>
 
       <Modal
@@ -677,6 +742,14 @@ export function CompanyDetailClient({ id }: CompanyDetailClientProps) {
           </div>
         </form>
       </Modal>
+
+      <style jsx global>{`
+        @media (max-width: 1024px) {
+          .container > div[style*='grid-template-columns'] {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </main>
   );
 }
